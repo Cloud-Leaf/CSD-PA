@@ -38,6 +38,8 @@ static int cmd_q(char *args) {
 
 static int cmd_si(char *args);
 
+static int cmd_info(char *args);
+
 static int cmd_help(char *args);
 
 static struct {
@@ -49,6 +51,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Let the program step through N instructions and pause execution. When N is not given, the default value is 1", cmd_si },
+  { "info", "Input info r to print register status;info w to print Monitoring point information", cmd_info },
 
   /* TODO: Add more commands */
 
@@ -88,6 +91,18 @@ static int cmd_si(char *args) {
   }//更改N的值,若有输入
   
   cpu_exec(N);//玩儿去
+  return 0;
+}
+
+static int cmd_info(char *args){
+  char *arg = strtok(NULL, " ");
+  if(strcmp(arg,"r")==0){
+    printf("%x",cpu.eax);
+  }
+  else if(strcmp(arg,"w")==0){
+
+  }
+  else printf("Unknown arg '%s'\n", arg);
   return 0;
 }
 
