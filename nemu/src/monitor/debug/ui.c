@@ -36,10 +36,7 @@ static int cmd_q(char *args) {
   return -1;
 }
 
-static int cmd_si(char *args) {
-  cpu_exec(-1);//执行0xffffffff条指令,执行全部
-  return 0;
-}
+static int cmd_si(char *args);
 
 static int cmd_help(char *args);
 
@@ -79,6 +76,18 @@ static int cmd_help(char *args) {
     }
     printf("Unknown command '%s'\n", arg);
   }
+  return 0;
+}
+
+static int cmd_si(char *args) {
+  char *arg = strtok(NULL, " ");
+  int N=1;//默认执行1条
+
+  if(arg!=NULL){
+    N=atoi(arg);
+  }//更改N的值,若有输入
+  
+  cpu_exec(N);//玩儿去
   return 0;
 }
 
