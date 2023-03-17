@@ -97,7 +97,9 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args){
   char *arg = strtok(NULL, " ");
   if(strcmp(arg,"r")==0){
-    printf("eax:%#010x\teax:%#010x\n",cpu.eax,cpu.ebx);
+    printf("eax:%#010x\tebx:%#010x\tecx:%#010x\tedx:%#010x\n",cpu.eax,cpu.ebx,cpu.ecx,cpu.edx);
+    printf("esp:%#010x\tebp:%#010x\tesi:%#010x\tedi:%#010x\n",cpu.esp,cpu.ebp,cpu.esi,cpu.edi);
+    printf("eip:%#010x\n",cpu.eip);
   }
   else if(strcmp(arg,"w")==0){
 
