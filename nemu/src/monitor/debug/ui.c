@@ -18,17 +18,17 @@ char* rl_gets() {
     line_read = NULL;
   }
 
-  line_read = readline("(nemu) ");
+  line_read = readline("(nemu) ");//通过readline来读取，提示符为（nemu）
 
   if (line_read && *line_read) {
-    add_history(line_read);
+    add_history(line_read);//readline中存在history管理
   }
 
-  return line_read;
+  return line_read;//返回输入字符串
 }
 
 static int cmd_c(char *args) {
-  cpu_exec(-1);
+  cpu_exec(-1);//执行0xffffffff条指令,执行全部
   return 0;
 }
 
@@ -80,20 +80,20 @@ void ui_mainloop(int is_batch_mode) {
   if (is_batch_mode) {
     cmd_c(NULL);
     return;
-  }
+  }//进入匹配模式
 
   while (1) {
-    char *str = rl_gets();
-    char *str_end = str + strlen(str);
+    char *str = rl_gets();//获取输入字符
+    char *str_end = str + strlen(str);//字符串末尾
 
     /* extract the first token as the command */
-    char *cmd = strtok(str, " ");
+    char *cmd = strtok(str, " ");//分词，指向分词后的第一个词，再次执行则为第二个。。。
     if (cmd == NULL) { continue; }
 
     /* treat the remaining string as the arguments,
      * which may need further parsing
      */
-    char *args = cmd + strlen(cmd) + 1;
+    char *args = cmd + strlen(cmd) + 1;//指令后接参数
     if (args >= str_end) {
       args = NULL;
     }
@@ -108,7 +108,7 @@ void ui_mainloop(int is_batch_mode) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
         if (cmd_table[i].handler(args) < 0) { return; }
         break;
-      }
+      }//根据指令在table中依次对比决定执行哪个指令
     }
 
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
