@@ -70,7 +70,14 @@ static struct {
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
 
-static int cmd_p(char *args){return 0;}
+static int cmd_p(char *args){
+  bool s;
+  uint32_t res=expr(args,&s);
+  if(s)printf("value:%d",res);
+  else printf("error");
+
+  return 0;
+}
 
 static int cmd_x(char *args){
   int N=0;//打印数量

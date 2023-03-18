@@ -25,7 +25,13 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},         // equal  
-  {"0|[0-9][0-9]*", TK_INT},        // equal  
+  {"0|[1-9][0-9]*", TK_INT},        // int 
+  {"-",'-'},            //minus
+  {"\\*",'*'},          //mul
+  {"\\/",'/'},          //dup
+  {"\\(",'('},          //LB
+  {"\\)",')'},          //RB
+  
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -79,11 +85,17 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
+        
+        if(substr_len>32)assert(0);
+        if(rules[i].token_type==TK_NOTYPE)break;
         switch (rules[i].token_type) {
-          default: TODO();
+          case TK_INT:
+            strncpy(tokens[nr_token].str,substr_start,substr_len);
+            *(tokens[nr_token].str+substr_len)='\0';
+            break;
+          //default: TODO();
         }
-
+        nr_token+=1;
         break;
       }
     }
