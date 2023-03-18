@@ -204,6 +204,7 @@ int dominant_op(int p,int q){
       else if(tokens[i].type=='*'||tokens[i].type=='/')pos2=i;
     }
   }
+  printf("%d%d",pos1,pos2);
   return pos1==-1?pos1:pos2;
 
 }
