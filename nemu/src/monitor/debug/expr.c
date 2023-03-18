@@ -85,8 +85,12 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-        
-        if(substr_len>=32){printf("Max of string is 31\n");assert(0);}//由于数组只有32B,为了补\0不能超过31B
+        //由于数组的特性,此处如果以最大值32判断
+        //则末尾补0将占据下一个数据的type,类型为enum
+        //若enum最大值不超过0x00ffffff,保证后续第一个字节为\0
+        //则可以如此判断,但逻辑不合格
+        //此处应检测最大长度31,留1B补\0
+        if(substr_len>=32){printf("Max of string is 31\n");return false;}//由于数组只有32B,为了补\0不能超过31B
         if(rules[i].token_type==TK_NOTYPE)break;
         tokens[nr_token].type=rules[i].token_type;
         switch (rules[i].token_type) {
@@ -114,6 +118,10 @@ static bool make_token(char *e) {
   return true;
 }
 
+int eval(int p,int q);//计算表达式
+
+bool check_parentheses(int p,int q);//检测括号匹配
+
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -121,7 +129,42 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  eval(0,nr_token-1);
 
   return 0;
+}
+
+int eval(int p,int q){
+  if(p>q) {
+    //bad
+    //return 0;
+  }
+  else if(p==q){
+    //single
+    return atoi(tokens[p].str);
+  }
+  else if(check_parentheses(p,q)==true){
+    return(eval(p+1,q-1));
+  }
+  else{
+
+  }
+  return 0;
+}
+
+bool check_parentheses(int p,int q){
+  if(p>=q){printf("error situation in checkp p>=q\n");return false;}//检测pq
+  if(tokens[p].type!='('||tokens[q].type!=')')return false;//检测pq是否为括号
+
+  int count=0;
+  for(int i=p+1;i<q;i++){
+    if(tokens[i].type=='(')count++;
+    else if(tokens[i].type==')'){
+      if(count!=0)count--;
+      else return false;
+    }
+  }
+  //计数法判断
+  if(count==0)return true;
+  return false;
 }
