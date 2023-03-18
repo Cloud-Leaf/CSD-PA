@@ -191,8 +191,8 @@ int check_parentheses(int p,int q){
 int dominant_op(int p,int q){
   if(p>=q){printf("error situation in dominant p>=q\n");return -1;}//检测pq,不合法返回-1
 
-  int pos1=0;
-  int pos2=0;
+  int pos1=-1;
+  int pos2=-1;
 
   int count=0;
   for(int i=p+1;i<q;i++){
@@ -204,6 +204,6 @@ int dominant_op(int p,int q){
       else if(tokens[i].type=='*'||tokens[i].type=='/')pos2=i;
     }
   }
-  return pos1?pos1:pos2;
+  return pos1==-1?pos1:pos2;
 
 }
