@@ -77,8 +77,18 @@ static int cmd_x(char *args){
   vaddr_t addr;
 
   int ret=sscanf(args,"%d 0x%x",&N,&addr);
-  if(ret<=0);
-  printf("%d%x",N,addr);
+  if(ret<=0){
+    printf("args error\n");
+    return 0;
+  };
+  //printf("%d%x",N,addr);
+
+  for(int i=0;i<N;i++){
+    if(i%4==0)printf("\n%#010x:\t%#x",addr,vaddr_read(addr+i,1));
+    else printf("\t%#x",vaddr_read(addr+i,1));
+  }
+  printf("\n");
+
   return 0;
 }
 
