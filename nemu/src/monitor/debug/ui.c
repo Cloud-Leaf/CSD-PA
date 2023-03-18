@@ -73,10 +73,10 @@ static struct {
 static int cmd_p(char *args){return 0;}
 
 static int cmd_x(char *args){
-  int N=0;
-  vaddr_t addr;
+  int N=0;//打印数量
+  vaddr_t addr;//起始地址
 
-  int ret=sscanf(args,"%d 0x%x",&N,&addr);
+  int ret=sscanf(args,"%d 0x%x",&N,&addr);//获取参数,默认0x...输入
   if(ret<=0){
     printf("args error\n");
     return 0;
@@ -86,7 +86,7 @@ static int cmd_x(char *args){
   for(int i=0;i<N;i++){
     if(i%4==0)printf("\n%#010x:\t0x%02x",addr+i,vaddr_read(addr+i,1));
     else printf("\t0x%02x",vaddr_read(addr+i,1));
-  }
+  }//利用vaddr_read,从arg1读arg2个字节然后返回
   printf("\n");
 
   return 0;
@@ -127,7 +127,7 @@ static int cmd_si(char *args) {
     if(atoi(arg)<=0){
       printf("args error\n");
       return 0;
-    }
+    }//禁止小于=0的数
     N=atoi(arg);
   }//更改N的值,若有输入
   
