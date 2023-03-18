@@ -5,6 +5,7 @@
  */
 #include <sys/types.h>
 #include <regex.h>
+#include <stdlib.h>
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
@@ -120,7 +121,9 @@ static bool make_token(char *e) {
 
 int eval(int p,int q);//计算表达式
 
-bool check_parentheses(int p,int q);//检测括号匹配
+int check_parentheses(int p,int q);//检测括号匹配
+
+int dominant_op(int p,int q);
 
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -129,42 +132,72 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  eval(0,nr_token-1);
-
-  return 0;
+  *success=true;
+  
+  return eval(0,nr_token-1);;
 }
 
 int eval(int p,int q){
   if(p>q) {
     //bad
-    //return 0;
+    assert(0);
   }
   else if(p==q){
     //single
     return atoi(tokens[p].str);
   }
-  else if(check_parentheses(p,q)==true){
+  else if(check_parentheses(p,q)==1){
     return(eval(p+1,q-1));
   }
   else{
-
+    int op=dominant_op(p,q);
+    int val1=eval(p,op-1);
+    int val2=eval(op+1,q);
+    switch (tokens[op].type)
+    {
+    case '+':return val1+val2;
+    case '-':return val1-val2;
+    case '*':return val1*val2;
+    case '/':if(val2!=0)return val1/val2;else printf("Divided by 0");assert(0);
+    default:assert(0);
+    }
   }
   return 0;
 }
 
-bool check_parentheses(int p,int q){
-  if(p>=q){printf("error situation in checkp p>=q\n");return false;}//检测pq
-  if(tokens[p].type!='('||tokens[q].type!=')')return false;//检测pq是否为括号
+int check_parentheses(int p,int q){
+  if(p>=q){printf("error situation in checkp p>=q\n");return -1;}//检测pq,不合法返回-1
+  if(tokens[p].type!='('||tokens[q].type!=')')return 0;//检测pq是否为括号
 
   int count=0;
   for(int i=p+1;i<q;i++){
     if(tokens[i].type=='(')count++;
     else if(tokens[i].type==')'){
       if(count!=0)count--;
-      else return false;
+      else return 0;
     }
   }
   //计数法判断
-  if(count==0)return true;
-  return false;
+  if(count==0)return 1;
+  return 0;
+}
+
+int dominant_op(int p,int q){
+  if(p>=q){printf("error situation in dominant p>=q\n");return -1;}//检测pq,不合法返回-1
+
+  int pos1=0;
+  int pos2=0;
+
+  int count=0;
+  for(int i=p+1;i<q;i++){
+    if(tokens[i].type=='(')count++;
+    else if(tokens[i].type==')')count--;
+
+    if(count==0&&tokens[i].type!=TK_INT){
+      if(tokens[i].type=='+'||tokens[i].type=='-')pos1=i;
+      else if(tokens[i].type=='*'||tokens[i].type=='/')pos2=i;
+    }
+  }
+  return pos1?pos1:pos2;
+
 }
