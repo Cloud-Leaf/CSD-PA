@@ -86,7 +86,7 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
         
-        if(substr_len>32)assert(0);
+        if(substr_len>31)assert(0);
         if(rules[i].token_type==TK_NOTYPE)break;
         tokens[nr_token].type=rules[i].token_type;
         switch (rules[i].token_type) {
