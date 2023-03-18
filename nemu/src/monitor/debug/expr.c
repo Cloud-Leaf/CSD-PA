@@ -109,7 +109,7 @@ static bool make_token(char *e) {
       return false;
     }
   }
-
+  printf("\n%s",tokens[0].str);
   return true;
 }
 
