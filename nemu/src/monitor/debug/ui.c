@@ -99,7 +99,7 @@ static int cmd_si(char *args) {
 
   if(arg!=NULL){
     N=atoi(arg);
-    if(N<=0){
+    if(atoi(arg)<=0){
       printf("args error\n");
       return 0;
     }
