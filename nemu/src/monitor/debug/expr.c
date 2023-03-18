@@ -141,7 +141,7 @@ int eval(int p,int q){
   if(p>q) {
     //bad
     //printf("error situation in eval p>q\n");
-    //assert(0);
+    assert(0);
     return 0;
   }
   else if(p==q){
