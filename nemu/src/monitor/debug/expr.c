@@ -8,7 +8,7 @@
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
-  TK_INT,
+  TK_INT=0xffffffff,
   /* TODO: Add more token types */
 
 };
@@ -109,6 +109,7 @@ static bool make_token(char *e) {
       return false;
     }
   }
+  
   printf("\n%s",tokens[0].str);
   return true;
 }
