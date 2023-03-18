@@ -137,7 +137,7 @@ uint32_t expr(char *e, bool *success) {
   if(!check_expr()){
     *success = false;
     return 0;
-  }
+  }//判断表达式是否合法
 
   *success=true;
   
@@ -145,6 +145,7 @@ uint32_t expr(char *e, bool *success) {
 }
 
 bool check_expr(){
+  //检查全表达式是否括号匹配
   int count=0;
   for(int i=0;i<nr_token;i++){
     if(tokens[i].type=='(')count++;
@@ -162,7 +163,7 @@ int eval(int p,int q){
   if(p>q) {
     //bad
     //printf("error situation in eval p>q\n");
-    assert(0);
+    //assert(0);
     return 0;
   }
   else if(p==q){
@@ -171,7 +172,7 @@ int eval(int p,int q){
     return atoi(tokens[p].str);
   }
   else if(check_parentheses(p,q)==1){
-    printf("find parentheses\n");
+    //printf("find parentheses\n");
     return(eval(p+1,q-1));
   }
   else{

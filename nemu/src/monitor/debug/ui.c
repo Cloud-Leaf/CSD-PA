@@ -74,7 +74,7 @@ static int cmd_p(char *args){
   bool s;
   uint32_t res=expr(args,&s);
   if(s)printf("value:%d\n",res);
-  else printf("error\n");
+  else printf("error expr\n");
 
   return 0;
 }
