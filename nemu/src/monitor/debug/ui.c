@@ -73,8 +73,8 @@ static struct {
 static int cmd_p(char *args){
   bool s;
   uint32_t res=expr(args,&s);
-  if(s)printf("value:%d",res);
-  else printf("error");
+  if(s)printf("value:%d\n",res);
+  else printf("error\n");
 
   return 0;
 }
