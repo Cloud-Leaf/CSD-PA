@@ -88,6 +88,7 @@ static bool make_token(char *e) {
         
         if(substr_len>32)assert(0);
         if(rules[i].token_type==TK_NOTYPE)break;
+        tokens[nr_token].type=rules[i].token_type;
         switch (rules[i].token_type) {
           case TK_INT:
             strncpy(tokens[nr_token].str,substr_start,substr_len);
