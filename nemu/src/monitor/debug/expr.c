@@ -140,6 +140,7 @@ uint32_t expr(char *e, bool *success) {
 int eval(int p,int q){
   if(p>q) {
     //bad
+    printf("error situation in eval p>=q\n");
     assert(0);
   }
   else if(p==q){
@@ -159,7 +160,7 @@ int eval(int p,int q){
     case '-':return val1-val2;
     case '*':return val1*val2;
     case '/':if(val2!=0)return val1/val2;else printf("Divided by 0");assert(0);
-    default:assert(0);
+    default:printf("error situation in evald p>=q\n");assert(0);
     }
   }
   return 0;
