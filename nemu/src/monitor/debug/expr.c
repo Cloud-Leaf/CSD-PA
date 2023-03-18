@@ -127,6 +127,8 @@ bool check_expr();//检测全部表达式合法
 
 int dominant_op(int p,int q);
 
+bool expr_error=0;
+
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -139,9 +141,16 @@ uint32_t expr(char *e, bool *success) {
     return 0;
   }//判断表达式是否合法
 
+  uint32_t res=eval(0,nr_token-1);
+
+  if(expr_error){
+    *success = false;
+    return 0;
+  }
+
   *success=true;
   
-  return eval(0,nr_token-1);
+  return res;
 }
 
 bool check_expr(){
@@ -163,7 +172,7 @@ int eval(int p,int q){
   if(p>q) {
     //bad
     //printf("error situation in eval p>q\n");
-    assert(0);
+    expr_error=1;
     return 0;
   }
   else if(p==q){
