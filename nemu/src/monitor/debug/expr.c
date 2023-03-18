@@ -155,6 +155,7 @@ int eval(int p,int q){
   }
   else{
     int op=dominant_op(p,q);
+    printf("this op is %c",tokens[op].type);
     int val1=eval(p,op-1);
     int val2=eval(op+1,q);
     switch (tokens[op].type)
@@ -165,7 +166,7 @@ int eval(int p,int q){
     case '/':if(val2!=0)return val1/val2;else printf("Divided by 0");assert(0);
     default:printf("error situation in evald p>=q\n");
     }
-    printf("this op is %c",tokens[op].type);
+    
   }
   return 0;
 }
