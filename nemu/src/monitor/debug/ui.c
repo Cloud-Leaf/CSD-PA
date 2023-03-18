@@ -84,8 +84,8 @@ static int cmd_x(char *args){
   //printf("%d%x",N,addr);
 
   for(int i=0;i<N;i++){
-    if(i%4==0)printf("\n%#010x:\t%#x",addr,vaddr_read(addr+i,1));
-    else printf("\t%#x",vaddr_read(addr+i,1));
+    if(i%4==0)printf("\n%#010x:\t%#02x",addr,vaddr_read(addr+i,1));
+    else printf("\t%#02x",vaddr_read(addr+i,1));
   }
   printf("\n");
 
