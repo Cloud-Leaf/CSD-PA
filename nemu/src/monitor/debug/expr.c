@@ -146,9 +146,11 @@ int eval(int p,int q){
   }
   else if(p==q){
     //single
+    printf("single number %s\n",tokens[p].str);
     return atoi(tokens[p].str);
   }
   else if(check_parentheses(p,q)==1){
+    printf("find parentheses\n");
     return(eval(p+1,q-1));
   }
   else{
@@ -161,8 +163,9 @@ int eval(int p,int q){
     case '-':return val1-val2;
     case '*':return val1*val2;
     case '/':if(val2!=0)return val1/val2;else printf("Divided by 0");assert(0);
-    default:printf("error situation in evald p>=q\n");assert(0);
+    default:printf("error situation in evald p>=q\n");
     }
+    printf("this op is %c",tokens[op].type);
   }
   return 0;
 }
