@@ -123,6 +123,8 @@ int eval(int p,int q);//计算表达式
 
 int check_parentheses(int p,int q);//检测括号匹配
 
+bool check_expr();//检测全部表达式合法
+
 int dominant_op(int p,int q);
 
 uint32_t expr(char *e, bool *success) {
@@ -130,11 +132,30 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-
+  
   /* TODO: Insert codes to evaluate the expression. */
+  if(!check_expr()){
+    *success = false;
+    return 0;
+  }
+
   *success=true;
   
   return eval(0,nr_token-1);;
+}
+
+bool check_expr(){
+  int count=0;
+  for(int i=0;i<nr_token;i++){
+    if(tokens[i].type=='(')count++;
+    else if(tokens[i].type==')'){
+      if(count!=0)count--;
+      else return 0;
+    }
+  }
+  //计数法判断
+  if(count==0)return 1;
+  return 0;
 }
 
 int eval(int p,int q){
@@ -146,7 +167,7 @@ int eval(int p,int q){
   }
   else if(p==q){
     //single
-    printf("single number %s\n",tokens[p].str);
+    //printf("single number %s\n",tokens[p].str);
     return atoi(tokens[p].str);
   }
   else if(check_parentheses(p,q)==1){
@@ -155,7 +176,7 @@ int eval(int p,int q){
   }
   else{
     int op=dominant_op(p,q);
-    printf("this op is %c\n",tokens[op].type);
+    //printf("this op is %c\n",tokens[op].type);
     int val1=eval(p,op-1);
     int val2=eval(op+1,q);
     switch (tokens[op].type)
@@ -195,7 +216,7 @@ int dominant_op(int p,int q){
   int pos2=-1;
 
   int count=0;
-  for(int i=p;i<q;i++){
+  for(int i=p;i<=q;i++){
     if(tokens[i].type=='(')count++;
     else if(tokens[i].type==')')count--;
 
