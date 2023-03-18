@@ -92,6 +92,7 @@ static bool make_token(char *e) {
           case TK_INT:
             strncpy(tokens[nr_token].str,substr_start,substr_len);
             *(tokens[nr_token].str+substr_len)='\0';
+            printf("\n%s",tokens[nr_token].str);
             break;
           //default: TODO();
         }
