@@ -8,7 +8,7 @@
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
-  TK_INT=0x41414141,
+  TK_INT,
   /* TODO: Add more token types */
 
 };
@@ -86,16 +86,16 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
         
-        if(substr_len>32)assert(0);
+        if(substr_len>=32)assert(0);//由于数组只有32B,为了补\0不能超过31B
         if(rules[i].token_type==TK_NOTYPE)break;
         tokens[nr_token].type=rules[i].token_type;
         switch (rules[i].token_type) {
           case TK_INT:
             strncpy(tokens[nr_token].str,substr_start,substr_len);
             *(tokens[nr_token].str+substr_len)='\0';
-            printf("\n%s",tokens[nr_token].str);
-            printf("\n%d",substr_len);
-            printf("\n%d",*(tokens[nr_token].str+substr_len+3));
+            //printf("\n%s",tokens[nr_token].str);
+            //printf("\n%d",substr_len);
+            //printf("\n%d",*(tokens[nr_token].str+substr_len+3));
             break;
           //default: TODO();
         }
@@ -110,7 +110,7 @@ static bool make_token(char *e) {
     }
   }
   
-  printf("\n%s",tokens[0].str);
+  //printf("\n%s",tokens[0].str);
   return true;
 }
 
