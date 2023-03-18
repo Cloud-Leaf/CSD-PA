@@ -8,7 +8,7 @@
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
-  TK_INT=0xffffffff,
+  TK_INT=0x41414141,
   /* TODO: Add more token types */
 
 };
