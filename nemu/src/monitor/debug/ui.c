@@ -42,13 +42,13 @@ static int cmd_info(char *args);
 
 static int cmd_help(char *args);
 
-static int cmd_p(char *args){return 0;};
+static int cmd_p(char *args);
 
-static int cmd_x(char *args){return 0;};
+static int cmd_x(char *args);
 
-static int cmd_w(char *args){return 0;};
+static int cmd_w(char *args);
 
-static int cmd_d(char *args){return 0;};
+static int cmd_d(char *args);
 
 static struct {
   char *name;
@@ -69,6 +69,22 @@ static struct {
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
+
+static int cmd_p(char *args){return 0;}
+
+static int cmd_x(char *args){
+  int N=0;
+  vaddr_t addr;
+
+  int ret=sscanf(args,"%d 0x%x",&N,&addr);
+  if(ret<=0);
+  printf("%d%x",N,addr);
+  return 0;
+}
+
+static int cmd_w(char *args){return 0;}
+
+static int cmd_d(char *args){return 0;}
 
 static int cmd_help(char *args) {
   /* extract the first argument */
@@ -98,11 +114,11 @@ static int cmd_si(char *args) {
   uint64_t N=1;//默认执行1条
 
   if(arg!=NULL){
-    N=atoi(arg);
     if(atoi(arg)<=0){
       printf("args error\n");
       return 0;
     }
+    N=atoi(arg);
   }//更改N的值,若有输入
   
   cpu_exec(N);//玩儿去
@@ -117,7 +133,7 @@ static int cmd_info(char *args){
     printf("eip:%#010x\n",cpu.eip);
   }
   else if(strcmp(arg,"w")==0){
-
+    
   }
   else printf("Unknown arg '%s'\n", arg);
   return 0;
