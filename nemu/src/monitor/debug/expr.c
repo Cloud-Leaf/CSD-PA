@@ -86,7 +86,7 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
         
-        if(substr_len>=32)assert(0);//由于数组只有32B,为了补\0不能超过31B
+        if(substr_len>=32){printf("Max of string is 31");assert(0);}//由于数组只有32B,为了补\0不能超过31B
         if(rules[i].token_type==TK_NOTYPE)break;
         tokens[nr_token].type=rules[i].token_type;
         switch (rules[i].token_type) {
