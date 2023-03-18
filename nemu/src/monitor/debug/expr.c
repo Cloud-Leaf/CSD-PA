@@ -141,7 +141,7 @@ uint32_t expr(char *e, bool *success) {
 
   *success=true;
   
-  return eval(0,nr_token-1);;
+  return eval(0,nr_token-1);
 }
 
 bool check_expr(){
@@ -163,7 +163,7 @@ int eval(int p,int q){
   if(p>q) {
     //bad
     //printf("error situation in eval p>q\n");
-    //assert(0);
+    assert(0);
     return 0;
   }
   else if(p==q){
