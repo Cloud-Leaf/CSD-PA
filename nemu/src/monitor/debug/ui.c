@@ -42,6 +42,14 @@ static int cmd_info(char *args);
 
 static int cmd_help(char *args);
 
+static int cmd_p(char *args){return 0;};
+
+static int cmd_x(char *args){return 0;};
+
+static int cmd_w(char *args){return 0;};
+
+static int cmd_d(char *args){return 0;};
+
 static struct {
   char *name;
   char *description;
@@ -52,7 +60,10 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Let the program step through N instructions and pause execution. When N is not given, the default value is 1", cmd_si },
   { "info", "Input info r to print register status;info w to print Monitoring point information", cmd_info },
-
+  { "p", "Expression evaluation", cmd_p },
+  { "x", "Scan memory", cmd_x },
+  { "w", "Set monitoring points", cmd_w },
+  { "d", "Delete monitoring points", cmd_d },
   /* TODO: Add more commands */
 
 };
@@ -84,10 +95,14 @@ static int cmd_help(char *args) {
 
 static int cmd_si(char *args) {
   char *arg = strtok(NULL, " ");
-  int N=1;//默认执行1条
+  uint64_t N=1;//默认执行1条
 
   if(arg!=NULL){
     N=atoi(arg);
+    if(N<=0){
+      printf("args error\n");
+      return 0;
+    }
   }//更改N的值,若有输入
   
   cpu_exec(N);//玩儿去
