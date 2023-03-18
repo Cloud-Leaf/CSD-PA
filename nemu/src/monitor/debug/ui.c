@@ -84,8 +84,8 @@ static int cmd_x(char *args){
   //printf("%d%x",N,addr);
 
   for(int i=0;i<N;i++){
-    if(i%4==0)printf("\n%#010x:\t%#02x",addr,vaddr_read(addr+i,1));
-    else printf("\t%#02x",vaddr_read(addr+i,1));
+    if(i%4==0)printf("\n0x%010x:\t0x%02x",addr+i,vaddr_read(addr+i,1));
+    else printf("\t0x%02x",vaddr_read(addr+i,1));
   }
   printf("\n");
 
@@ -138,9 +138,9 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args){
   char *arg = strtok(NULL, " ");
   if(strcmp(arg,"r")==0){
-    printf("eax:%#010x\tebx:%#010x\tecx:%#010x\tedx:%#010x\n",cpu.eax,cpu.ebx,cpu.ecx,cpu.edx);
-    printf("esp:%#010x\tebp:%#010x\tesi:%#010x\tedi:%#010x\n",cpu.esp,cpu.ebp,cpu.esi,cpu.edi);
-    printf("eip:%#010x\n",cpu.eip);
+    printf("eax:0x%010x\tebx:0x%010x\tecx:0x%010x\tedx:0x%010x\n",cpu.eax,cpu.ebx,cpu.ecx,cpu.edx);
+    printf("esp:0x%010x\tebp:0x%010x\tesi:0x%010x\tedi:0x%010x\n",cpu.esp,cpu.ebp,cpu.esi,cpu.edi);
+    printf("eip:0x%010x\n",cpu.eip);
   }
   else if(strcmp(arg,"w")==0){
     
