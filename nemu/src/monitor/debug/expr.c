@@ -94,7 +94,7 @@ static bool make_token(char *e) {
             *(tokens[nr_token].str+substr_len)='\0';
             printf("\n%s",tokens[nr_token].str);
             printf("\n%d",substr_len);
-            printf("\n%d",tokens[nr_token].str[31]);
+            printf("\n%d",*(tokens[nr_token].str+substr_len));
             break;
           //default: TODO();
         }
