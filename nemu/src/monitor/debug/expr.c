@@ -155,7 +155,7 @@ int eval(int p,int q){
   }
   else{
     int op=dominant_op(p,q);
-    printf("this op is %c",tokens[op].type);
+    printf("this op is %c\n",tokens[op].type);
     int val1=eval(p,op-1);
     int val2=eval(op+1,q);
     switch (tokens[op].type)
