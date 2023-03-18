@@ -195,7 +195,7 @@ int dominant_op(int p,int q){
   int pos2=-1;
 
   int count=0;
-  for(int i=p+1;i<q;i++){
+  for(int i=p;i<q;i++){
     if(tokens[i].type=='(')count++;
     else if(tokens[i].type==')')count--;
 
@@ -205,6 +205,6 @@ int dominant_op(int p,int q){
     }
   }
   printf("%d%d",pos1,pos2);
-  return pos1==-1?pos1:pos2;
+  return pos1==-1?pos2:pos1;
 
 }
