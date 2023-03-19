@@ -99,10 +99,16 @@ static int cmd_x(char *args){
   //};
   //printf("%d%x",N,addr);
 
+  //for(int i=0;i<N;i++){
+  //  if(i%4==0)printf("\n%#010x:\t0x%02x",addr+i,vaddr_read(addr+i,1));
+  //  else printf("\t0x%02x",vaddr_read(addr+i,1));
+  //}//利用vaddr_read,从arg1读arg2个字节然后返回
+
   for(int i=0;i<N;i++){
-    if(i%4==0)printf("\n%#010x:\t0x%02x",addr+i,vaddr_read(addr+i,1));
-    else printf("\t0x%02x",vaddr_read(addr+i,1));
+    printf("\n%#010x:\t0x%08x",addr+i,vaddr_read(addr+i,4));
   }//利用vaddr_read,从arg1读arg2个字节然后返回
+
+
   printf("\n");
 
   return 0;
