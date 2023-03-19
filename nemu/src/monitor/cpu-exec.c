@@ -32,7 +32,7 @@ void cpu_exec(uint64_t n) {
     /* TODO: check watchpoints here. */
 
   if(watch_wp()){
-    nemu_state=NEMU_STOP;
+    nemu_state=NEMU_STOP;//发生变化,中断
   }
 
 #endif
