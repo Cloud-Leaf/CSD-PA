@@ -8,8 +8,10 @@
 #include <stdlib.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
-  TK_INT,
+  TK_NOTYPE = 256, TK_EQ, //空格,等于
+  TK_DEC,TK_HEX,TK_REG,   //十进制,十六,寄存器
+  TK_NEQ,TK_AND,TK_OR,    //不等于,与,或
+  TK_NEG,TK_DEREF,        //负号,指针
   /* TODO: Add more token types */
 
 };
@@ -26,7 +28,8 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},         // equal  
-  {"0|[1-9][0-9]*", TK_INT},        // int 
+  {"0x0|0x[1-9A-Fa-f][0-9A-Fa-f]*",TK_HEX},//hex
+  {"0|[1-9][0-9]*", TK_DEC},        // dec 
   {"-",'-'},            //minus
   {"\\*",'*'},          //mul
   {"\\/",'/'},          //dup
@@ -95,7 +98,7 @@ static bool make_token(char *e) {
         if(rules[i].token_type==TK_NOTYPE)break;
         tokens[nr_token].type=rules[i].token_type;
         switch (rules[i].token_type) {
-          case TK_INT:
+          case TK_DEC:
             strncpy(tokens[nr_token].str,substr_start,substr_len);
             *(tokens[nr_token].str+substr_len)='\0';
             //printf("\n%s",tokens[nr_token].str);
@@ -230,7 +233,7 @@ int dominant_op(int p,int q){
     if(tokens[i].type=='(')count++;
     else if(tokens[i].type==')')count--;
 
-    if(count==0&&tokens[i].type!=TK_INT){
+    if(count==0&&tokens[i].type!=TK_DEC){
       if(tokens[i].type=='+'||tokens[i].type=='-')pos1=i;
       else if(tokens[i].type=='*'||tokens[i].type=='/')pos2=i;
     }
