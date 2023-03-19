@@ -115,9 +115,28 @@ static int cmd_x(char *args){
   return 0;
 }
 
-static int cmd_w(char *args){return 0;}
+static int cmd_w(char *args){
+  new_wp(args);
+  return 0;
+}
 
-static int cmd_d(char *args){return 0;}
+static int cmd_d(char *args){
+  int num=0;
+  int no=sscanf(args,"%d",&num);
+
+  if(no<=0){
+    printf("args error\n");
+    return 0;
+  }
+
+  int r=free_wp(num);
+  if(r==false)
+    printf("error, no watchpoint %d\n",num);
+  else
+    printf("success delete watchpoint %d\n",num);
+
+  return 0;
+}
 
 static int cmd_help(char *args) {
   /* extract the first argument */
@@ -166,7 +185,8 @@ static int cmd_info(char *args){
     printf("eip:%#010x\n",cpu.eip);
   }
   else if(strcmp(arg,"w")==0){
-    
+    print_wp();
+    return 0;
   }
   else printf("Unknown arg '%s'\n", arg);
   return 0;

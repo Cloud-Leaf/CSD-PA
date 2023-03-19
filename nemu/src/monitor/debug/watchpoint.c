@@ -29,7 +29,7 @@ WP* new_wp(char *args){
   //检查并计算表达式,若不合法则不分陪
   int value;
   bool s;
-  value=expr(wp->expr,s);
+  value=expr(args,&s);
   if(s==false){printf("please check your expression\n");return NULL;}
 
   //分配新wp
@@ -81,8 +81,36 @@ bool free_wp(int no){
   return false;
 }
 
-void print_wp();
+void print_wp(){
+  if(head==NULL){printf("no watchpoint\n");return;}
 
-bool watch_wp();
+  printf("watchpoints:\n");
+  printf("NO.   expr    hit\n");
+  temp=head;
+  while(temp!=NULL){
+    printf("%d    %s    %d\n",temp->NO,temp->expr,temp->hit);
+    temp=temp->next;
+  }
+}
+
+bool watch_wp(){
+  bool s;
+  int res;
+  if(head==NULL)return false;//没变化
+
+  temp=head;
+  while(temp!=NULL){
+    res=expr(temp->expr,&s);
+    if(res!=temp->old_v){
+      temp->hit++;
+      printf("Hardware watchpoint %d:%s\n",temp->NO,temp->expr);
+      printf("Old value:%d\nNew value:%d\n\n",temp->old_v,res);
+      temp->old_v=res;
+      return true;//发生变化
+    }
+    temp=temp->next;
+  }
+  return false;
+}
 
 
