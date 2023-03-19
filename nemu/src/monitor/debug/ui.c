@@ -105,7 +105,7 @@ static int cmd_x(char *args){
   //}//利用vaddr_read,从arg1读arg2个字节然后返回
 
   for(int i=0;i<N;i++){
-    printf("\n%#010x:\t0x%08x",addr+i,vaddr_read(addr+i,4));
+    printf("\n%#010x:\t0x%08x",addr+4*i,vaddr_read(addr+i,4));
   }//利用vaddr_read,从arg1读arg2个字节然后返回
 
 
