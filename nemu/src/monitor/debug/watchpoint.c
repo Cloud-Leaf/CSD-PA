@@ -85,10 +85,10 @@ void print_wp(){
   if(head==NULL){printf("no watchpoint\n");return;}
 
   printf("watchpoints:\n");
-  printf("NO.   expr    hit\n");
+  printf("NO.       expr        hit\n");
   temp=head;
   while(temp!=NULL){
-    printf("%d    %s    %d\n",temp->NO,temp->expr,temp->hit);
+    printf("%d        %s        %d\n",temp->NO,temp->expr,temp->hit);
     temp=temp->next;
   }
 }
