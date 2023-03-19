@@ -5,12 +5,16 @@
 
 static WP wp_pool[NR_WP];
 static WP *head, *free_;
+static int next_p=0;
+static WP *temp;
 
 void init_wp_pool() {
   int i;
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
     wp_pool[i].next = &wp_pool[i + 1];
+    wp_pool[i].old_v=0;
+    wp_pool[i].hit=0;
   }
   wp_pool[NR_WP - 1].next = NULL;
 
@@ -19,5 +23,66 @@ void init_wp_pool() {
 }
 
 /* TODO: Implement the functionality of watchpoint */
+WP* new_wp(char *args){
+  if(free_==NULL){printf("no free watchpoint\n");assert(0);}//没有空间
+
+  //检查并计算表达式,若不合法则不分陪
+  int value;
+  bool s;
+  value=expr(wp->expr,s);
+  if(s==false){printf("please check your expression\n");return NULL;}
+
+  //分配新wp
+  WP* wp=free_;
+  free_=free_->next;
+  //初始化
+  wp->NO=next_p++;
+  wp->next=NULL;
+  strcpy(wp->expr,args);
+  wp->hit=0;
+  wp->old_v=value;
+
+  //加入监视点链表
+  temp=head;
+  if(head==NULL)head=wp;
+  else {
+    while(temp->next!=NULL)
+      temp=temp->next;
+    temp->next=wp;
+  }
+  
+  printf("Success set watchpoint %d, old value: %d\n",wp->NO,wp->old_v);
+  return wp;
+}
+
+bool free_wp(int no){
+  WP *wp=NULL;
+  if(head==NULL){printf("no watchpoint\n");return false;}//head不能为空
+
+  if(head->NO==no){wp=head;head=head->next;}//检查head是不是符合
+  else{
+    temp=head;
+    while(temp->next!=NULL&&temp!=NULL){
+      if(temp->next->NO==no){
+        wp=temp->next;
+        temp->next=temp->next->next;
+        break;
+      }
+      temp=temp->next;
+    }
+  }//其他
+
+  //更新链表
+  if(wp!=NULL){
+    wp->next=free_;
+    free_=wp;
+    return true;
+  }
+  return false;
+}
+
+void print_wp();
+
+bool watch_wp();
 
 
