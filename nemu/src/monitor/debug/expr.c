@@ -28,8 +28,14 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},         // equal  
+  {"!=",TK_NEQ},        //not equal
   {"0x0|0x[1-9A-Fa-f][0-9A-Fa-f]*",TK_HEX},//hex
   {"0|[1-9][0-9]*", TK_DEC},        // dec 
+  {"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi|eip|ax|cx|dx|bx|sp|bp|si|di|al|cl|dl|bl|ah|ch|dh|bh)",TK_REG},//reg
+  {"&&",TK_AND},      //and
+  {"\\|\\|",TK_OR},   //or
+  {"!",'!'},          //not
+
   {"-",'-'},            //minus
   {"\\*",'*'},          //mul
   {"\\/",'/'},          //dup
@@ -105,6 +111,14 @@ static bool make_token(char *e) {
             //printf("\n%d",substr_len);
             //printf("\n%d",*(tokens[nr_token].str+substr_len+3));
             break;
+          case TK_HEX:
+            strncpy(tokens[nr_token].str,substr_start+2,substr_len-2);
+            *(tokens[nr_token].str+substr_len)='\0';
+            break;
+          case TK_REG:
+            strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
+            *(tokens[nr_token].str+substr_len)='\0';
+            break;
           //default: TODO();
         }
         nr_token+=1;
@@ -130,6 +144,8 @@ bool check_expr();//检测全部表达式合法
 
 int dominant_op(int p,int q);
 
+void check_neg();
+
 bool expr_error=0;
 
 uint32_t expr(char *e, bool *success) {
@@ -144,6 +160,8 @@ uint32_t expr(char *e, bool *success) {
     return 0;
   }//判断表达式是否合法
 
+  check_neg();//检查负号
+
   uint32_t res=eval(0,nr_token-1);
 
   if(expr_error){
@@ -156,6 +174,10 @@ uint32_t expr(char *e, bool *success) {
   return res;
 }
 
+void check_neg(){
+  
+}
+
 bool check_expr(){
   //检查全表达式是否括号匹配
   int count=0;
@@ -165,6 +187,11 @@ bool check_expr(){
       if(count!=0)count--;
       else return 0;
     }
+
+    if(tokens[i].type=='-')
+      if(tokens[i-1].type!=TK_DEC) tokens[i].type=TK_NEG;
+    if(tokens[i].type=='*')
+      if(tokens[i-1].type!=TK_DEC) tokens[i].type=TK_DEREF;
   }
   //计数法判断
   if(count==0)return 1;
@@ -181,6 +208,28 @@ int eval(int p,int q){
   else if(p==q){
     //single
     //printf("single number %s\n",tokens[p].str);
+    int num;
+    switch(tokens[p].type){
+      case TK_DEC:
+        sscanf(tokens[p].str,"%d",&num);
+        return num;
+      case TK_HEX:
+        sscanf(tokens[p].str,"%x",&num);
+        return num;
+      case TK_REG:
+        if(strcmp(tokens[p].str,"eip")==0)
+          return cpu.eip;
+        for(int i=0;i<8;i++){
+          if(strcmp(tokens[p].str,regsl[i])==0)
+            return reg_l(i);
+          if(strcmp(tokens[p].str,regsw[i])==0)
+            return reg_w(i);
+          if(strcmp(tokens[p].str,regsb[i])==0)
+            return reg_b(i);
+        }
+        printf("wrong reg in eval\n");
+        assert(0);
+    }
     return atoi(tokens[p].str);
   }
   else if(check_parentheses(p,q)==1){
@@ -188,17 +237,40 @@ int eval(int p,int q){
     return(eval(p+1,q-1));
   }
   else{
+    int value_in_reg;
+    int res;
+    vaddr_t addr;
     int op=dominant_op(p,q);
     //printf("this op is %c\n",tokens[op].type);
+
+    switch (tokens[op].type)
+    {
+      case TK_NEG:
+        return -eval(p+1,q);
+      case TK_DEREF:
+        addr=eval(p+1,q);
+        value_in_reg=vaddr_read(addr,4);
+        printf("addr=%u(0x%x)-->value=%d(0x%08x)\n",addr,addr,value_in_reg,value_in_reg);
+        return value_in_reg;
+      case '!':
+        res=eval(p+1,q);
+        return res?0:1;
+    }
+
+
     int val1=eval(p,op-1);
     int val2=eval(op+1,q);
     switch (tokens[op].type)
     {
-    case '+':return val1+val2;
-    case '-':return val1-val2;
-    case '*':return val1*val2;
-    case '/':if(val2!=0)return val1/val2;else printf("Divided by 0");assert(0);
-    default:printf("error situation in evald p>=q\n");
+      case '+':return val1+val2;
+      case '-':return val1-val2;
+      case '*':return val1*val2;
+      case '/':if(val2!=0)return val1/val2;else printf("Divided by 0");assert(0);
+      case TK_EQ:return val1==val2;
+      case TK_NEQ:return val1!=val2;
+      case TK_AND:return val1&&val2;
+      case TK_OR:return val1||val2;
+      default:printf("error situation in evald p<q\n");
     }
     
   }
@@ -225,20 +297,46 @@ int check_parentheses(int p,int q){
 int dominant_op(int p,int q){
   if(p>=q){printf("error situation in dominant p>=q\n");return -1;}//检测pq,不合法返回-1
 
-  int pos1=-1;
-  int pos2=-1;
-
+  int pos[5]={-1,-1,-1,-1,-1};
   int count=0;
+
   for(int i=p;i<=q;i++){
     if(tokens[i].type=='(')count++;
     else if(tokens[i].type==')')count--;
 
-    if(count==0&&tokens[i].type!=TK_DEC){
-      if(tokens[i].type=='+'||tokens[i].type=='-')pos1=i;
-      else if(tokens[i].type=='*'||tokens[i].type=='/')pos2=i;
+    if(count==0){
+      switch (tokens[i].type)
+      {
+        case TK_NEG:
+        case TK_DEREF:
+        case '!':
+          pos[4]=i;
+          break;
+        case '/':
+        case '*':
+          pos[3]=i;
+          break;
+        case '+':
+        case '-':
+          pos[2]=i;
+          break;
+        case TK_EQ:
+        case TK_NEQ:
+          pos[1]=i;
+          break;
+        case TK_AND:
+        case TK_OR:
+          pos[0]=i;
+          break;
+      }
     }
   }
   //printf("%d%d",pos1,pos2);
-  return pos1==-1?pos2:pos1;
 
+  for(int i=0;i<5;i++)
+    if(pos[i]!=-1)
+      return pos[i];
+
+  printf("wrong dominant op\n");
+  assert(0);
 }
