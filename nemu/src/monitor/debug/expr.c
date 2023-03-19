@@ -104,18 +104,18 @@ static bool make_token(char *e) {
         if(rules[i].token_type==TK_NOTYPE)break;
         tokens[nr_token].type=rules[i].token_type;
         switch (rules[i].token_type) {
-          case TK_DEC:
+          case TK_DEC://十进制,记录值
             strncpy(tokens[nr_token].str,substr_start,substr_len);
             *(tokens[nr_token].str+substr_len)='\0';
             //printf("\n%s",tokens[nr_token].str);
             //printf("\n%d",substr_len);
             //printf("\n%d",*(tokens[nr_token].str+substr_len+3));
             break;
-          case TK_HEX:
+          case TK_HEX://十六进制,转换为10并记录,忽略0x
             strncpy(tokens[nr_token].str,substr_start+2,substr_len-2);
             *(tokens[nr_token].str+substr_len-2)='\0';
             break;
-          case TK_REG:
+          case TK_REG://寄存器,记录寄存器名称,忽略$
             strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
             *(tokens[nr_token].str+substr_len-1)='\0';
             break;
@@ -142,11 +142,9 @@ int eval(int p,int q);//计算表达式
 
 int check_parentheses(int p,int q);//检测括号匹配
 
-bool check_expr();//检测全部表达式合法
+bool check_expr();//检测全部表达式合法,并判断负号-和指针*
 
-int dominant_op(int p,int q);
-
-void check_neg();
+int dominant_op(int p,int q);//寻找主要op
 
 bool expr_error=0;
 
@@ -162,22 +160,16 @@ uint32_t expr(char *e, bool *success) {
     return 0;
   }//判断表达式是否合法
 
-  check_neg();//检查负号
-
-  uint32_t res=eval(0,nr_token-1);
+  uint32_t res=eval(0,nr_token-1);//计算表达式的值
 
   if(expr_error){
     *success = false;
     return 0;
-  }
+  }//若表达式正确
 
   *success=true;
   
   return res;
-}
-
-void check_neg(){
-  
 }
 
 bool check_expr(){
@@ -190,6 +182,7 @@ bool check_expr(){
       else return 0;
     }
 
+    //判断负号-和指针*
     if(tokens[i].type=='-')
       if(tokens[i-1].type!=TK_DEC) tokens[i].type=TK_NEG;
     if(tokens[i].type=='*')
@@ -207,7 +200,7 @@ int eval(int p,int q){
     expr_error=1;
     return 0;
   }
-  else if(p==q){
+  else if(p==q){//识别single,十进制,十六,寄存器
     //single
     //printf("single number %s\n",tokens[p].str);
     int num;
@@ -245,6 +238,7 @@ int eval(int p,int q){
     int op=dominant_op(p,q);
     //printf("this op is %c\n",tokens[op].type);
 
+    //单目运算符
     switch (tokens[op].type)
     {
       case TK_NEG:
@@ -252,14 +246,14 @@ int eval(int p,int q){
       case TK_DEREF:
         addr=eval(p+1,q);
         value_in_reg=vaddr_read(addr,4);
-        printf("addr=%u(0x%x)-->value=%d(0x%08x)\n",addr,addr,value_in_reg,value_in_reg);
+        printf("addr=0x%08x-->value=0x%08x\n",addr,value_in_reg);
         return value_in_reg;
       case '!':
         res=eval(p+1,q);
         return res?0:1;
     }
 
-
+    //双目
     int val1=eval(p,op-1);
     int val2=eval(op+1,q);
     switch (tokens[op].type)
@@ -299,7 +293,7 @@ int check_parentheses(int p,int q){
 int dominant_op(int p,int q){
   if(p>=q){printf("error situation in dominant p>=q\n");return -1;}//检测pq,不合法返回-1
 
-  int pos[5]={-1,-1,-1,-1,-1};
+  int pos[5]={-1,-1,-1,-1,-1};//存在五种优先级,0最低,4最高
   int count=0;
 
   for(int i=p;i<=q;i++){

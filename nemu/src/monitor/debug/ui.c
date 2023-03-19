@@ -81,13 +81,22 @@ static int cmd_p(char *args){
 
 static int cmd_x(char *args){
   int N=0;//打印数量
-  vaddr_t addr;//起始地址
+  char *arg = strtok(NULL, " ");
+  N=atoi(arg);
+  if(N<=0) {printf("please input a number greater than 0\n");return 0;}
 
-  int ret=sscanf(args,"%d 0x%x",&N,&addr);//获取参数,默认0x...输入
-  if(ret<=0){
-    printf("args error\n");
-    return 0;
-  };
+  vaddr_t addr;//起始地址
+  bool s;
+  arg = strtok(NULL, " ");
+  addr=expr(arg,&s);
+
+  if(!s){printf("bad expression!\n");return 0;}
+
+  //int ret=sscanf(args,"%d 0x%x",&N,&addr);//获取参数,默认0x...输入
+  //if(ret<=0){
+  //  printf("args error\n");
+  //  return 0;
+  //};
   //printf("%d%x",N,addr);
 
   for(int i=0;i<N;i++){
