@@ -92,6 +92,7 @@ static int cmd_x(char *args){
 
   if(!s){printf("bad expression!\n");return 0;}
 
+  //仅0x版本
   //int ret=sscanf(args,"%d 0x%x",&N,&addr);//获取参数,默认0x...输入
   //if(ret<=0){
   //  printf("args error\n");
