@@ -80,7 +80,7 @@ static int cmd_p(char *args){
 }
 
 static int cmd_x(char *args){
-  if(args==NULL)return 0;
+  if(args==NULL){printf("please input args\n");return 0;}
   int N=0;//打印数量
   char *arg = strtok(NULL, " ");
   N=atoi(arg);
