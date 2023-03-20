@@ -116,7 +116,7 @@ bool watch_wp(){
   }
 
   if(ischange)
-    printf("%d watchpoints have changed\n",num);
+    printf("%d watchpoints have changed\n",num);//打印更改情况
   return ischange;
 }
 
