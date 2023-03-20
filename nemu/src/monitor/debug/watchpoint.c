@@ -98,6 +98,8 @@ bool watch_wp(){
   int res;
   if(head==NULL)return false;//没变化
 
+  bool ischange=0;
+
   temp=head;
   while(temp!=NULL){
     res=expr(temp->expr,&s);
@@ -106,11 +108,11 @@ bool watch_wp(){
       printf("Hardware watchpoint %d:%s\n",temp->NO,temp->expr);
       printf("Old value:%d\nNew value:%d\n\n",temp->old_v,res);
       temp->old_v=res;
-      return true;//发生变化
+      ischange=1;//发生变化
     }
     temp=temp->next;
   }
-  return false;
+  return ischange;
 }
 
 
