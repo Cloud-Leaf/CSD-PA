@@ -261,7 +261,7 @@ int eval(int p,int q){
       case '+':return val1+val2;
       case '-':return val1-val2;
       case '*':return val1*val2;
-      case '/':if(val2!=0)return val1/val2;else printf("Divided by 0\n");return 0;
+      case '/':if(val2!=0)return val1/val2;else printf("Divided by 0\n");expr_error=1;return 0;
       case TK_EQ:return val1==val2;
       case TK_NEQ:return val1!=val2;
       case TK_AND:return val1&&val2;
