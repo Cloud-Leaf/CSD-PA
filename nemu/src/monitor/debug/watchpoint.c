@@ -99,6 +99,7 @@ bool watch_wp(){
   if(head==NULL)return false;//没变化
 
   bool ischange=0;
+  int num=0;
 
   temp=head;
   while(temp!=NULL){
@@ -109,9 +110,13 @@ bool watch_wp(){
       printf("Old value:%d\nNew value:%d\n\n",temp->old_v,res);
       temp->old_v=res;
       ischange=1;//发生变化
+      num++;
     }
     temp=temp->next;
   }
+
+  if(ischange)
+    printf("%d watchpoints have changed\n",num);
   return ischange;
 }
 
