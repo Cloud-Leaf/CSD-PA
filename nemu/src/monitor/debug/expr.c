@@ -184,9 +184,9 @@ bool check_expr(){
 
     //判断负号-和指针*
     if(tokens[i].type=='-')
-      if(tokens[i-1].type!=TK_DEC) tokens[i].type=TK_NEG;
+      if(tokens[i-1].type!=TK_DEC&&tokens[i-1].type!=')') tokens[i].type=TK_NEG;
     if(tokens[i].type=='*')
-      if(tokens[i-1].type!=TK_DEC) tokens[i].type=TK_DEREF;
+      if(tokens[i-1].type!=TK_DEC&&tokens[i-1].type!=')') tokens[i].type=TK_DEREF;
   }
   //计数法判断
   if(count==0)return 1;
