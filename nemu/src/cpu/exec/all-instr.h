@@ -47,6 +47,7 @@ make_EHelper(setcc);
 make_EHelper(test);
 
 make_EHelper(jp);
+make_EHelper(jmp);
 make_EHelper(jmp_rm);
 make_EHelper(jcc);
 make_EHelper(lea);
