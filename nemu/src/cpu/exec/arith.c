@@ -40,7 +40,14 @@ make_EHelper(cmp) {
 }
 
 make_EHelper(inc) {
-  TODO();
+  //TODO();
+
+  rtl_addi(&t2 ,&id_dest->val,1);
+  operand_write(id_dest, &t2);
+  rtl_update_ZFSF(&t2, id_dest->width);
+  rtl_eqi(&t0,&t2,0x80000000);//result为负。溢出
+  rtl_set_OF(&t0);
+
 
   print_asm_template1(inc);
 }
