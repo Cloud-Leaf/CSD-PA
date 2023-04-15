@@ -130,7 +130,8 @@ static inline void rtl_mv(rtlreg_t* dest, const rtlreg_t *src1) {
 
 static inline void rtl_not(rtlreg_t* dest) {
   // dest <- ~dest
-  TODO();
+  //TODO();
+  rtl_xori(dest,dest,0xffffffff);
 }
 
 static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
