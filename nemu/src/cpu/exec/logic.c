@@ -73,6 +73,7 @@ make_EHelper(shl) {
 }
 
 make_EHelper(rol) {
+  //未实现CF
   int CL=id_src->val;//CL times
   
   rtl_li(&t0,id_dest->val);//t0中为初始值
