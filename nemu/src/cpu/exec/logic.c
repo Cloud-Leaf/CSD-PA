@@ -73,14 +73,13 @@ make_EHelper(shl) {
 }
 
 make_EHelper(rol) {
-  int CL=id_src->val;//CL times
-  
-  rtl_li(&t0,id_dest->val);//t0中为初始值
-  while(CL){
-    rtl_msb(&t2,&t0,id_dest->width);//t2中为最高有效位
-    rtl_shli(&t0,&id_dest->val,0x1);//t0*2
-    rtl_add(&t0,&t0,&t2);//t0=t0+t2
-    CL-=1;
+  int tmp=id_src->val;
+  //暂存rm
+  rtl_li(&t0,id_dest->val);
+  while(tmp){
+    rtl_msb(&t2,&t0,id_dest->width);
+    t0=t0*2+t2;
+    tmp-=1;
   }
   if(id_src->val==1){
     // t2暂存高位
@@ -90,6 +89,7 @@ make_EHelper(rol) {
     rtl_set_OF(&t2);
   }
   operand_write(id_dest,&t0);
+  print_asm_template1(rol);
 }
 
 make_EHelper(shr) {
