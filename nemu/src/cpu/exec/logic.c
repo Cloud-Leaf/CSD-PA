@@ -72,6 +72,26 @@ make_EHelper(shl) {
   print_asm_template2(shl);
 }
 
+make_EHelper(rol) {
+  int CL=id_src->val;//CL times
+  
+  rtl_li(&t0,id_dest->val);//t0中为初始值
+  while(CL){
+    rtl_msb(&t2,&t0,id_dest->width);//t2中为最高有效位
+    rtl_shli(&t0,&id_dest->val,0x1);//t0*2
+    rtl_add(&t0,&t0,&t2);//t0=t0+t2
+    CL-=1;
+  }
+  if(id_src->val==1){
+    // t2暂存高位
+    rtl_msb(&t2,&t0,id_dest->width);
+    rtl_eqi(&t2,&t2,cpu.eflags.CF);
+    t2=t2==0?1:0;
+    rtl_set_OF(&t2);
+  }
+  operand_write(id_dest,&t0);
+}
+
 make_EHelper(shr) {
   //TODO();
   // unnecessary to update CF and OF in NEMU
