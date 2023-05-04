@@ -50,6 +50,7 @@ typedef struct {
     uint16_t limit;
   }idtr;
   
+  rtlreg_t cs;
 
 } CPU_state;
 
