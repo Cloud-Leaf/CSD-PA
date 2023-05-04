@@ -25,6 +25,9 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
   uint32_t target_addr=(off_32_16<<16)+off_15_0;
 
 #ifdef DEBUG
+  Log("gate_addr=0x%x",gate_addr);
+  Log("cpu.idtr.base=0x%x",cpu.idtr.base);
+  Log("cpu.idtr.limit=0x%x",cpu.idtr.limit);
   Log("target_addr=0x%x",target_addr);
 #endif
 
