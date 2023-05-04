@@ -1,5 +1,4 @@
 #include "cpu/exec.h"
-#include "../intr.c"
 
 void diff_test_skip_qemu();
 void diff_test_skip_nemu();
@@ -34,6 +33,7 @@ make_EHelper(mov_cr2r) {
 #endif
 }
 
+extern void raise_intr(uint8_t NO, vaddr_t ret_addr);
 make_EHelper(int) {
   //TODO();
 
