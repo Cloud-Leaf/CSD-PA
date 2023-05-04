@@ -12,7 +12,7 @@ make_EHelper(lidt) {
 
   t1=id_dest->val+2;
   rtl_lm(&t0,&t1,4);
-  cpu.idtr.limit=t0;
+  cpu.idtr.base=t0;
 
   print_asm_template1(lidt);
 }
