@@ -38,7 +38,7 @@ make_EHelper(int) {
   //TODO();
 
   uint8_t NO=id_dest->val&0xff;
-  printf("\n%u",id_dest->val);
+  //printf("\n%u",id_dest->val);
   raise_intr(NO,decoding.seq_eip);
 
   print_asm("int %s", id_dest->str);
