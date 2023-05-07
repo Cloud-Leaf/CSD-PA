@@ -42,7 +42,7 @@ void *_sbrk(intptr_t increment){
     probreak=probreak_new;
     return (void *)temp;
   }
-
+  return (void*)1;
   return (void *)-1;
 }
 
