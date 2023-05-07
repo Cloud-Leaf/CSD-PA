@@ -31,8 +31,8 @@ int _write(int fd, void *buf, size_t count){
 }
 
 
-extern char _end;
-static intptr_t probreak=(intptr_t)&_end;
+extern end;
+static intptr_t probreak=(intptr_t)&end;
 void *_sbrk(intptr_t increment){
   intptr_t probreak_new=probreak+increment;
   int r=_syscall_(SYS_brk,probreak_new,0,0);
