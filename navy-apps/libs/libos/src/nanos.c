@@ -31,7 +31,7 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
-  extern end;
+  extern char end;
   static uintptr_t probreak=(uintptr_t)&end;
 
   uintptr_t probreak_new=probreak+increment;
@@ -42,7 +42,7 @@ void *_sbrk(intptr_t increment){
     probreak=probreak_new;
     return (void *)temp;
   }
-  return (void*)1;
+
   return (void *)-1;
 }
 
