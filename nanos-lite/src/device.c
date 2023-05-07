@@ -16,12 +16,10 @@ size_t events_read(void *buf, size_t len) {
     key^=0x8000;
     down=true;
   }
-  if(key!=_KEY_NONE) {//按键事件
+  if(key!=_KEY_NONE) //按键事件
     sprintf(str,"%s %s\n",down?"kd":"ku",keyname[key]);
-  }
-  else {//时钟事件
+  else //时钟事件
     sprintf(str,"t %d\n",_uptime());
-  }
   
   if(strlen(str)<=len) {
     strncpy((char*)buf,str,strlen(str));
