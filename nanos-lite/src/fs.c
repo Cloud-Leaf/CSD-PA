@@ -78,6 +78,10 @@ ssize_t fs_read(int fd,void* buf,size_t len) {
     Log("arg invalid:fd<3 or fd==FD_FB");
     return 0;
   }
+
+  if(fd==FD_EVENTS)
+    return events_read(buf,len);
+
   int n=fs_filesz(fd)-get_open_offset(fd);//最多能读取多少字节
   if(n>len) 
     n=len;
@@ -109,7 +113,7 @@ ssize_t fs_write(int fd,void* buf,size_t len) {
     fb_write(buf,get_open_offset(fd),n);
   else
     ramdisk_write(buf,disk_offset(fd)+get_open_offset(fd),n);
-    
+
   set_open_offset(fd,get_open_offset(fd)+n);//设置偏移量
   return n;
 }
