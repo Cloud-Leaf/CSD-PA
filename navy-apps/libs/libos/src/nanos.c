@@ -31,13 +31,13 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
-  extern _end;
-  static intptr_t probreak=(intptr_t)&_end;
+  extern end;
+  static intptr_t probreak=(intptr_t)&end;
 
   intptr_t probreak_new=probreak+increment;
   int r=_syscall_(SYS_brk,probreak_new,0,0);
 
-  {
+  if(r==0){
     intptr_t temp=probreak;
     probreak=probreak_new;
     return (void *)temp;
