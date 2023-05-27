@@ -64,3 +64,5 @@ make_EHelper(pusha);
 make_EHelper(iret);
 
 make_EHelper(cwtl);
+
+make_EHelper(mov_store_cr);
