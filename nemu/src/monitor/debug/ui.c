@@ -184,7 +184,7 @@ static int cmd_info(char *args){
     printf("eax:%#010x\tebx:%#010x\tecx:%#010x\tedx:%#010x\n",cpu.eax,cpu.ebx,cpu.ecx,cpu.edx);
     printf("esp:%#010x\tebp:%#010x\tesi:%#010x\tedi:%#010x\n",cpu.esp,cpu.ebp,cpu.esi,cpu.edi);
     printf("eip:%#010x\n",cpu.eip);printf("eflags.zf:%#010x\n",cpu.eflags.ZF);
-    printf("CR0:%#010x\tCR3:%#010x",cpu.CR0,cpu.CR3);
+    printf("CR0:%#010x\tCR3:%#010x\n",cpu.CR0,cpu.CR3);
   }
   else if(strcmp(arg,"w")==0){
     print_wp();
