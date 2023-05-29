@@ -7,7 +7,6 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
    */
 
   //TODO();
-  cpu.INTR=true;
 
   memcpy(&t1,&cpu.eflags,sizeof(cpu.eflags));
   rtl_li(&t0,t1);
