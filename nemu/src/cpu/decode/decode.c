@@ -319,7 +319,6 @@ void operand_write(Operand *op, rtlreg_t* src) {
 
 make_DHelper(mov_load_cr){
   decode_op_rm(eip,id_dest,false,id_src,false);
-  rtl_load_cr(&id_src->val,id_src->reg);
 
 #ifdef DEBUG
   sprintf(id_src->str,5, "%%cr%d",id_dest->reg);
