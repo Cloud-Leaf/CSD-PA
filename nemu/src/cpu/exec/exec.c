@@ -251,10 +251,11 @@ void exec_wrapper(bool print_flag) {
 
   if(cpu.INTR&cpu.eflags.IF){
     cpu.INTR=false;
-    extern void raise_intr(uint8_t NO,vaddr_t ret_addr);
-    raise_intr(TIME_IRQ,cpu.eip);
-    update_eip();
+    //extern void raise_intr(uint8_t NO,vaddr_t ret_addr);
+    //raise_intr(TIME_IRQ,cpu.eip);
+    //update_eip();
   }
+
 
 #ifdef DIFF_TEST
   void difftest_step(uint32_t);
