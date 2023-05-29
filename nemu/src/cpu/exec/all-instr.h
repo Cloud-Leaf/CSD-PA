@@ -65,5 +65,5 @@ make_EHelper(iret);
 
 make_EHelper(cwtl);
 
-make_EHelper(mov_load_cr);
+
 make_EHelper(mov_store_cr);
