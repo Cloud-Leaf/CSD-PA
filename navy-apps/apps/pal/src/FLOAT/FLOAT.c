@@ -3,14 +3,42 @@
 #include <assert.h>
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-  assert(0);
-  return 0;
+  //assert(0);
+  int64_t temp=(int64_t)a*(int64_t)b;
+  FLOAT res=(FLOAT)(temp>>16);
+  return res;
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
-  assert(0);
-  return 0;
+  //assert(0);
+  assert(b!=0);
+  FLOAT A=Fabs(a);
+  FLOAT B=Fabs(b);
+  FLOAT INTEGER=a/b;
+  A=A%B;
+
+  for(int i=0;i<16;i++){
+    A<<=1;
+    INTEGER<<=1;
+    if(A>=B){
+      A-=B;
+      INTEGER++;
+    }
+  }
+  if(((a^b)&0x80000000)==0x80000000)INTEGER=-INTEGER;
+  return INTEGER;
+
+
+  //return 0;
 }
+
+struct float_
+{
+  uint32_t frac:23;
+  uint32_t exp:8;
+  uint32_t sign:1;
+};
+
 
 FLOAT f2F(float a) {
   /* You should figure out how to convert `a' into FLOAT without
@@ -23,13 +51,36 @@ FLOAT f2F(float a) {
    * performing arithmetic operations on it directly?
    */
 
-  assert(0);
-  return 0;
+  //assert(0);
+  struct float_ *f=(struct float_ *)&a;
+  
+  uint32_t res;
+  uint32_t frac;
+  int exp;
+  if((f->exp&0xff)==0xff)
+    assert(0);
+  else if(f->exp==0)
+  {
+    exp=1-127;
+    frac=(f->frac&0x7fffff)
+  }
+  else{
+    exp=f->exp-127;
+    frac=(f->frac&0x7fffff)|(1<<23);
+  }
+  if(exp>=7&&exp<22)
+    res=frac<<(exp-7);
+  else if(exp<7&&exp>-32)
+    res=frac>>7>>-exp;
+  else
+    assert(0); 
+
+  return (f->sign)?-res:res;
 }
 
 FLOAT Fabs(FLOAT a) {
-  assert(0);
-  return 0;
+  //assert(0);
+  return a>0?a:-a;
 }
 
 /* Functions below are already implemented */
