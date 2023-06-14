@@ -4,6 +4,7 @@
 #define HAS_ASYE
 #define HAS_PTE
 
+
 void init_mm(void);
 void init_ramdisk(void);
 void init_device(void);
