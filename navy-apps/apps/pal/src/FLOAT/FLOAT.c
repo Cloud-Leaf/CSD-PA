@@ -12,7 +12,7 @@ FLOAT F_mul_F(FLOAT a, FLOAT b) {
 FLOAT F_div_F(FLOAT a, FLOAT b) {
   //assert(0);
 
-  
+
   assert(b!=0);
   FLOAT A=Fabs(a);
   FLOAT B=Fabs(b);
@@ -64,7 +64,7 @@ FLOAT f2F(float a) {
   else if(f->exp==0)
   {
     exp=1-127;
-    frac=(f->frac&0x7fffff)
+    frac=(f->frac&0x7fffff);
   }
   else{
     exp=f->exp-127;
