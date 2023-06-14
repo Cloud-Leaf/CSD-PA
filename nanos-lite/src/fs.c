@@ -64,6 +64,7 @@ extern size_t events_read(void *buf, size_t len);
 int fs_open(const char* filename,int flags,int mode) {
   for(int i=0;i<NR_FILES;i++) 
     if(strcmp(filename,file_table[i].name)==0) {
+      set_open_offset(i,0);
       return i;
     }
   
